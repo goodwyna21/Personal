@@ -1,0 +1,26 @@
+entire code must be a series of functions which are one expression. no new lines or spaces will be counted, and no variables can be declared
+all data must be passed as parameters and is destroyed when a function terminates
+functions are separated by //
+FUNCTIONAME(PARAMETER1,PARAMETER2,...)=EXPRESSION
+BEGIN(args) runs at the start with command line parameters passed in an ordered set
+TERMINATE() is called to clear cache and end all processes
+DISPLAY(PIXEL TUPLE, WINDOW PARAMS) displays pixels to screen
+WINDOW PARAMS must contain `width` and `height`
+
+file extension: .sw
+
+1 evaluates to true in a if condition
+
+set(get(params,`a`),`b`,1) on params={`a`:{`b`:0}} -> params={`a`:{`b`:1}}
+
+:= used for conditional paramters, such that f(a,b:=c) can be invoked as f(a) or f(a,b) where b defaults to c
+
+{}=0
+not({})=1
+{}'=1
+
+get([1,10,11,100],0) = 1
+get(01,1) = 0
+
+character literal -> ~
+causes output to treat byte as a character

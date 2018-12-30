@@ -1,0 +1,14 @@
+<title>[Needs Title]</title>
+<p id=blurb>[Ins Blurb]</p>
+<input id=start_but type=button onclick=begin()>Begin</input>
+<script>
+  function begin() {
+    var pages = [
+      "todo",
+    ];
+
+    for(i = 0; i < pages.length; i++){
+      window.history.pushState({home:'todo'},"",pages[i]);
+    }
+  }
+</script>

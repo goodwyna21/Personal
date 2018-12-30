@@ -1,0 +1,37 @@
+BEGIN()=loop("")
+//
+loop(str)=loop(update(str))
+//
+update(str)=
+//
+
+you're amazing
+
+ur amzng
+
+a 1 00000
+b 2 00001
+c 3 00010
+d 4 00011
+e 5 00100
+f 6 00101
+g 7 00110
+h 8 00111
+i 9 01000
+j10 01001
+k11 01010
+l12 01011
+m13
+n14
+o15
+p16
+q17
+r18
+s19
+t20
+u21
+v22
+w23
+x24
+y25
+z26

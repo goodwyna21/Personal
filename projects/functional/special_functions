@@ -1,0 +1,15 @@
+BEGIN(args)         runs on start, args is a tuple of command line parameters
+OUTPUT(dat)         outputs to console, or returns value if invoked from another process. Returns dat
+DISPLAY(pix,window) draws to screen, returns pix. pix is a 2 dimensional array of pixel color sets like [color:{`r`:0,`g`:0,`b`:0}] and window is a set containing the window parameters. It must contain `width` and `height` values
+INPUT               tuple of all keys and if theyre pressed; ex. {...,`UPARROW`:1,...}
+get(set,id)         returns value of id in set as a pointer to an object, meaning set can be invoked on it like set(get(a,`b`),`c`,val)
+get(tuple,addr)     returns value of addr in set, zero addressed, as a pointer to an object, meaning set can be invoked on it like set(get(a,`b`),`c`,val)
+set(set,id,val)     sets value of id in set, returns val
+set(tuple,addr,val) sets value of addr in tuple, zero addressed, returns val
+RAND()              returns 1 random bit
+rand(len)           returns random binary number with len bits
+size(tuple)         returns len of tuple, zero addressed, non inclusive; ex. size([1,0,1,1])=100
+not(bitstring)      returns the inverse of bitstring
+CHARS               dictionary set containing all letter's binary value and the string char in front, like {...,`a`:#01100001,`COMMA`:#00101100,...}
+" "                 string expression, "hi" = [get(CHARS,`h`),get(CHARS,`i`)]
+eq(a,b)             returns 1 if a=b, 0 else

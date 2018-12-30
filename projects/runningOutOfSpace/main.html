@@ -1,0 +1,32 @@
+<title id=disp>press any key to start</title>
+<script>
+  var str = gen_lets();
+  var started = false;
+
+  window.onkeydown = function(e){
+    //document.getElementById('disp').innerHTML = e.key;
+    if(!started){
+      game_loop = setInterval(game, 100);
+    }else{
+      switch(e.key){
+        case 'w':
+          str = str + gen_lets();
+          console.log('yeets');
+          break;
+      }
+    }
+  }
+
+  function game(){
+    document.getElementById('disp').innerHTML = str;
+    console.log(str);
+    if(Math.floor(Math.random() * 10) == 1){
+      str = str + gen_lets();
+    }
+  }
+
+  function gen_lets(){
+    var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()+={}[]/?\\';
+    return chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+</script>

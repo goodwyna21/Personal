@@ -1,0 +1,16 @@
+BEGIN(args)=loop({`cnt`:1,`rect`:{`color`:{`r`:11111111,`g`:Ø,`b`:Ø},`x`:1ØØ1Ø11,`y`:1Ø1Ø,`speedy`:Ø,`width`:11ØØ1Ø,`height`:11ØØ1Ø},window:{`color`:{`r`:Ø,`g`:Ø,`b`:Ø},`width`:11ØØ1ØØØ,`height`:11ØØ1ØØØ,`grav`:1Ø}})
+//
+loop(params)=(get(params,`cnt`)=1)>loop(render(params))
+//
+getcol(p,obj)=({eq(get(p,`x`),get(obj,`x`))}∩{lteq(get(p,`x`),add(get(obj,`x`),get(obj,`width`)))}∩{gteq(get(p,`y`),get(obj,`y`))}∩{lteq(get(p,`y`),add(get(obj,`y`),get(obj,`height`)))}={1})>1<Ø
+//
+genrow(row,params,cnt)=(eq(cnt,get(get(params,`window`),`width`))=1)>((getcol({`x`:cnt,`y`:row},get(params,`rect`))=1)>get(get(params,`rect`),`color`)<get(get(params,`window`),`color`))<(((getcol({`x`:cnt,`y`:row},get(params,`rect`))=1)>get(get(params,`rect`),`color`)<get(get(params,`window`),`color`))U(genrow(row,params,inc(cnt))))
+//
+gentable(params,row)=(eq(row,get(get(params,`window`),`height`))=1)>(genrow(params,row))<((genrow(params,row))U(gentable(params,inc(row))))
+//
+attach(a,params)=params
+//
+update(params)=attach(set(get(get(params,`rect`),`y`),add(get(get(params,`rect`),`y`),get(get(params,`window`),`grav`))),params)
+//
+render(params)=attach(DISPLAY(gentable(update(params)),get(params,`WINDOW`)),params)
+//

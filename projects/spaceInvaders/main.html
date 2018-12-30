@@ -1,0 +1,242 @@
+<html>
+<head>
+<title>Space Invaders</title>
+<style>
+body{
+  background-color:black;
+  }
+.centered{
+  width:700px;
+  height:700px;
+  position:absolute;
+  top:3%;
+  left:25%;
+}
+</style>
+</head>
+<body>
+<canvas class=centered id="myCanvas" width="700" height="700" style="border:1px solid #000000;"></canvas>
+<script>
+  var aliens = [];
+  var bullet = [];
+  var p_pos = 350;
+  var Keys = {left:false, right:false};
+  var friendly_bullets = 0;
+  var score = 0;
+
+  var alien_dir = true;
+  var alien_cnt = 0;
+  const alien_x_offset = 50;
+  const alien_y_offset = 50;
+  const alien_total_cnt= 10;
+  const alien_move_dist= 10;
+  const alien_width = 33;
+  const alien_height = 33;
+
+  const bullet_width = 9;
+  const bullet_height = 15;
+
+  const player_width = 33;
+  const player_height = 18;
+
+  var alien_loop;
+  var player_move_loop;
+  var bullet_move_loop;
+
+  var alien_sprite = new Image();
+  alien_sprite.src = "images/alien_1.png";
+  var player_sprite = new Image();
+  player_sprite.src = "images/player.png";
+  var bullet_sprite = new Image();
+  bullet_sprite.src = "images/bullet.png"
+
+  setTimeout(function(){
+    start();
+  }, 100);
+  setTimeout(function(){
+    alien_loop = setInterval(move_aliens, 1200);
+    player_move_loop = setInterval(move_player, 50);
+    bullet_move_loop = setInterval(move_bullet, 20);
+  }, 120);
+
+  //handle keypresses
+  window.onkeydown = function(e) {
+    var kc = e.keyCode;
+    e.preventDefault();
+
+    if      (kc === 65) Keys.left = true;  // only one key per event
+    else if (kc === 68) Keys.right = true;
+
+    if(kc === 32 && friendly_bullets < 3){
+      bullet.push({x:p_pos,y:650,dir:false});
+      friendly_bullets++;
+    }
+  };
+
+  window.onkeyup = function(e) {
+    var kc = e.keyCode;
+    e.preventDefault();
+
+    if      (kc === 65) Keys.left = false;
+    else if (kc === 68) Keys.right = false;
+  };
+  //end keypresses
+
+  function move_bullet(){
+    for(i = 0; i < bullet.length; i++){
+      bullet[i].y+=(bullet[i].dir)?5:-7;
+      if(bullet[i].y<10 || bullet[i].y>690){
+        if(!bullet[i].dir){
+          friendly_bullets--;
+        }
+        bullet.splice(i,1);
+      } else if(!bullet[i].dir){
+        for(n = 0; n < aliens.length; n++){
+          if(get_colision(bullet[i].x, bullet[i].y, bullet_width, bullet_height, aliens[n].x, aliens[n].y, alien_width, alien_height)){
+            if(!bullet[i].dir){
+              friendly_bullets--;
+            }
+            bullet.splice(i,1);
+            i--;
+            aliens.splice(n,1);
+            score+=(Math.random()>0.2)?100:1000;
+            break;
+          }
+        }
+
+      } else if(bullet[i].dir){
+        if(get_colision(bullet[i].x, bullet[i].y, bullet_width, bullet_height, p_pos, 650, player_width, player_height)){
+          bullet.splice(i,1);
+          i--;
+          clearInterval(alien_loop);
+          clearInterval(player_move_loop);
+          clearInterval(bullet_move_loop);
+          console.log("game over");
+        }
+      }
+    }
+    draw();
+  }
+
+  function get_colision(imp_x, imp_y, imp_width, imp_height, obj_x, obj_y, obj_width, obj_height){
+    corners = [{y:imp_y, x:imp_x},
+                {y:imp_y, x:imp_x+imp_width},
+                {x:imp_x, y:imp_y+imp_height},
+                {x:imp_x+imp_width, y:imp_y+imp_height}
+              ];
+
+    for(m = 0; m < 4; m++){
+      if(
+        (corners[m].x > obj_x) && (corners[m].x < (obj_x+obj_width)) &&
+        (corners[m].y > obj_y) && (corners[m].y < (obj_y+obj_height))
+      ){
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  function move_player(){
+    if(Keys.left){
+      p_pos = ((p_pos-=10)<20)?20:p_pos;
+    }
+    if(Keys.right){
+      p_pos = ((p_pos+=10)>680)?680:p_pos;
+    }
+    draw();
+  }
+
+  //one time startup
+  function start(){
+    for(x = 50; x < 600; x+=alien_x_offset){
+      for(y = 100; y < 350; y+=alien_y_offset){
+        aliens.push({x:x, y:y});
+      }
+    }
+    draw();
+  }
+
+  //alien loop
+  function move_aliens(){
+    alien_cnt++;
+    if(alien_cnt > alien_total_cnt){
+      alien_cnt = 0;
+      if(alien_dir){
+        alien_dir = false;
+      }else{
+        alien_dir = true;
+      }
+      for(i = 0; i < aliens.length; i++){
+        aliens[i].y+=40;
+      }
+    }else{
+      for(i = 0; i < aliens.length; i++){
+        aliens[i].x+=(alien_dir)?10:-10;
+      }
+    }
+    var rand_ind = Math.floor(Math.random()*aliens.length);
+    bullet.push({x:aliens[rand_ind].x,y:aliens[rand_ind].y,dir:true});
+    draw();
+  }
+
+  function drawSprite(sprite, s_x, s_y, cellW, cellH){
+    var ctx = document.getElementById("myCanvas").getContext("2d");
+    for(y = 0; y < sprite.length; y++){
+      for(x = 0; x < sprite[0].length; x++){
+        if(sprite[y][x]===1){
+          ctx.fillRect((x*cellW)+(s_x-((cellW*sprite[0].length)/2)),(y*cellH)+(s_y-((cellH*sprite.length)/2)),cellW,cellH);
+        }
+      }
+    }
+  }
+
+  var nums = [[[1,1,1],[1,0,1],[1,0,1],[1,0,1],[1,1,1]],//0
+              [[0,1,0],[1,1,0],[0,1,0],[0,1,0],[0,1,0]],
+              [[1,1,1],[0,0,1],[0,1,0],[1,0,0],[1,1,1]],
+              [[1,1,1],[0,0,1],[0,1,1],[0,0,1],[1,1,1]],
+              [[1,0,1],[1,0,1],[1,1,1],[0,0,1],[0,0,1]],
+              [[1,1,1],[1,0,0],[1,1,1],[0,0,1],[1,1,1]],
+              [[1,1,0],[1,0,0],[1,1,1],[1,0,1],[1,1,1]],
+              [[1,1,1],[0,0,1],[0,1,0],[0,1,0],[0,1,0]],
+              [[1,1,1],[1,0,1],[1,1,1],[1,0,1],[1,1,1]],
+              [[1,1,1],[1,0,1],[1,1,1],[0,0,1],[0,0,1]]];
+
+  function draw_score(){
+    var canv = document.getElementById("myCanvas");
+    var ctx = canv.getContext("2d");
+    ctx.fillStyle="#00e9ff";
+    var scr_str = ''+score;
+
+    for(i = 0; i < scr_str.length; i++){
+      drawSprite(nums[parseInt(scr_str[i])], (i*30)+(350-(((scr_str.length*30)+18)/2)), 20,6,6);
+      /*
+      for(y = 0; y < 5; y++){
+        for(x = 0; x < 3; x++){
+          if(nums[parseInt(scr_str[i])][y][x]===1){
+            ctx.fillRect((i*30)+(x*6)+(350-(((scr_str.length*30)+18)/2)),(y*6)+20,6,6);
+          }
+        }
+      }
+      */
+    }
+  }
+
+  //draw bullets player aliens score ya know
+  function draw(){
+    var canv = document.getElementById("myCanvas");
+    var ctx = canv.getContext("2d");
+    ctx.fillStyle="#111111";
+    ctx.fillRect(0, 0, 700, 700);
+    for(i = 0; i < aliens.length; i++){
+      ctx.drawImage(alien_sprite,aliens[i].x,aliens[i].y);
+    }
+    for(i = 0; i < bullet.length; i++){
+      ctx.drawImage(bullet_sprite,bullet[i].x,bullet[i].y);
+    }
+    ctx.drawImage(player_sprite,p_pos,650);
+    draw_score();
+  }
+</script>
+</body>
+</html>

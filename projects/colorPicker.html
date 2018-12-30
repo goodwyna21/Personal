@@ -1,0 +1,22 @@
+<html>
+<canvas id=myCanvas width=600 height=600></canvas>
+</html>
+<script>
+  function draw_circ(){
+    var canv = document.getElementById("myCanvas");
+    var ctx = canv.getContext("2d");
+    var width = canv.width;
+    var height = canv.height;
+    ctx.fillStyle = "#000000";
+
+    for(x = 0; x < width; x++){
+      for(y = 0; y < height; y++){
+        if(Math.pow(x-300, 2)+Math.pow(y-300,2)==Math.pow(300,2)){
+          ctx.fillRect(x,x,1,1);
+        }
+      }
+    }
+  }
+  draw_circ();
+</script>
+f

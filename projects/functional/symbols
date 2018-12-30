@@ -1,0 +1,14 @@
+∩ intersection
+U union #appends to end of array
+' compliment
+∆ symmetrical difference
+∈ element of
+∉ not element of
+0 null
+1 universal set
+> if
+< else
+#comment
+~ character literal
+[a,b,c] ordered set
+{`a`:b} dictionary

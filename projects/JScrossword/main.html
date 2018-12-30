@@ -1,0 +1,71 @@
+<input type="file" name="file" id="file">
+<br>
+<canvas id="canv" width="600" height="600" style="border:2px solid black" onclick="storeGuess(event)"></canvas>
+<script>
+  var canvasSetup = document.getElementById("canv");
+  var ctx = canvasSetup.getContext("2d");
+  guessX = 0; //stores user's click on canvas
+  guessY = 0; //stores user's click on canvas
+  var board = [];
+
+  function Square(lett, isB, correctLetter, lab){
+    this.letter = lett;
+    this.isBlack = isB;
+    this.corLetter = correctLetter;
+    this.label = lab;
+  }
+
+  document.getElementById('file').onchange = function(){
+    var file = this.files[0];
+
+    var reader = new FileReader();
+    reader.onload = function(progressEvent){
+      // By lines
+      var temp = [];
+      var lines = this.result.split('\n');
+      for(var n = 1; n < parseInt(lines[0]) + 1; n++){
+        temp = [];
+        for(var i = 0; i < lines[1].length; i++){
+          temp.push(new Square(((lines[n][i]=='`')?' ':lines[n][i]), lines[n][i]=='`', ((lines[n][i]=='`')?'`':lines[n][i])));
+        }
+        board.push(temp);
+      }
+      var tot = '';
+      for(var line = 0; line < board.length; line++){
+        for(var i = 0; i < board[line].length; i++){
+          tot += board[line][i].letter;
+        }
+        tot += "\n";
+      }
+      console.log(tot);
+    };
+    reader.readAsText(file);
+
+    var cellW = canv.width / board.length;
+    var cellH = canv.height / board.height;
+
+    console.log(board);
+    console.log(board[0]);
+    for(var x = 0; x < board.length; x++){
+      for(var y = 0; y < board[0].length; y++){
+        Console.log(board[x][y].letter);
+      }
+    }
+    ctx.strokeStyle="#000000";
+    ctx.fillStyle="#0000ff";
+    for(var x = 0; x < board.length; x++){
+      for(var y = 0; y < board[0].length; y++){
+        ctx.fillRect(x * cellW, y * cellH, cellW, cellH);
+        Console.log('yeet');
+      }
+    }
+  };
+
+  function storeGuess(event) {
+    var x = event.offsetX;
+    var y = event.offsetY;
+    guessX = x;
+    guessY = y;
+    console.log("x coords: " + guessX + ", y coords: " + guessY);
+  }
+</script>
