@@ -1,0 +1,23 @@
+HEIGHT
+//1 = black, 0 = white
+//black white grid
+######
+######
+######
+//letter grid
+AAAAAA
+AAAAAA
+AAAAAA
+//num across clues
+5
+//Across clues
+-----
+-----
+-----
+-----
+-----
+//num down clues
+3
+-----
+-----
+-----
